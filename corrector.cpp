@@ -5,33 +5,33 @@
 #include <ctype.h>
 #define PALABRAS 50000
 
-void Diccionario(char* szNombre) {
+void Diccionario(char* szNombre, char szPalabras[][TAMTOKEN], int iEstadisticas[], int& iNumElementos) {
     FILE* fp;
     fopen_s(&fp, szNombre, "r");
     if (fp == NULL) {
-        printf("No se pudo abrir el archivo\n");
+        printf("No se pudo abrir el archivo: %s\n", szNombre);
         return;
     }
 
-    char szPalabras[PALABRAS][TAMTOKEN] = { {0} };
-    int iEstadisticas[PALABRAS] = { 0 };
-    int iNumElementos = 0;
-
     char buffer[1024];
+    iNumElementos = 0;
+
     while (fgets(buffer, sizeof(buffer), fp)) {
         int i = 0;
         while (buffer[i] != '\0') {
             char palabra[TAMTOKEN] = { 0 };
             int j = 0;
 
-            while (buffer[i] != '\0' && buffer[i] != ' ' && buffer[i] != '\n') {
+            
+            while (buffer[i] != '\0' && !strchr(" \t,;().\r\n", buffer[i])) {
                 palabra[j++] = tolower(buffer[i++]);
             }
 
             if (j > 0) {
                 palabra[j] = '\0';
-                int encontrada = -1;
 
+               
+                int encontrada = -1;
                 for (int k = 0; k < iNumElementos; k++) {
                     if (strcmp(szPalabras[k], palabra) == 0) {
                         encontrada = k;
@@ -40,21 +40,26 @@ void Diccionario(char* szNombre) {
                 }
 
                 if (encontrada != -1) {
+                    
                     iEstadisticas[encontrada]++;
                 }
                 else if (iNumElementos < PALABRAS) {
-                    strcpy(szPalabras[iNumElementos], palabra); 
+                    
+                    strcpy_s(szPalabras[iNumElementos], palabra);
                     iEstadisticas[iNumElementos] = 1;
                     iNumElementos++;
                 }
             }
-            i++;
+
+           
+            while (buffer[i] != '\0' && strchr(" \t,;().\r\n", buffer[i])) {
+                i++;
+            }
         }
     }
 
     fclose(fp);
-    printf("Diccionario procesado\n");
-}
+
 void ClonaPalabras(char* szPalabraLeida, char szPalabrasSugeridas[][TAMTOKEN], int& iNumSugeridas) {
 
 }
