@@ -4,7 +4,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 void Diccionario(char* szNombre) {
-    FILE* fp = fopen(szNombre, "r"); 
+    FILE* fp;
+    fopen_s(&fp, szNombre, "r");
     if (fp == NULL) {
         printf("No se pudo abrir el archivo\n");
         return;
@@ -12,7 +13,23 @@ void Diccionario(char* szNombre) {
 
     char buffer[1024];
     while (fgets(buffer, sizeof(buffer), fp)) {
-        printf("%s", buffer); 
+        int i = 0;
+        while (buffer[i] != '\0') {
+            char palabra[50] = { 0 };
+            int j = 0;
+
+            
+            while (buffer[i] != '\0' && buffer[i] != ' ' && buffer[i] != '\n') {
+                palabra[j++] = buffer[i++];
+            }
+
+            if (j > 0) {
+                palabra[j] = '\0';
+                printf("Palabra encontrada: %s\n", palabra);
+            }
+
+            i++;
+        }
     }
 
     fclose(fp);
