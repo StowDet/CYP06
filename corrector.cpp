@@ -12,8 +12,7 @@ void Diccionario(char* szNombre, char szPalabras[][TAMTOKEN], int iEstadisticas[
         printf("No se pudo abrir el archivo: %s\n", szNombre);
         return;
     }
-
-    char buffer[1024];
+ char buffer[1024];
     iNumElementos = 0;
 
     while (fgets(buffer, sizeof(buffer), fp)) {
@@ -51,7 +50,7 @@ void Diccionario(char* szNombre, char szPalabras[][TAMTOKEN], int iEstadisticas[
                 }
             }
 
-           
+            
             while (buffer[i] != '\0' && strchr(" \t,;().\r\n", buffer[i])) {
                 i++;
             }
@@ -59,6 +58,23 @@ void Diccionario(char* szNombre, char szPalabras[][TAMTOKEN], int iEstadisticas[
     }
 
     fclose(fp);
+
+    
+    for (int i = 0; i < iNumElementos - 1; i++) {
+        for (int j = i + 1; j < iNumElementos; j++) {
+            if (strcmp(szPalabras[i], szPalabras[j]) > 0) {
+                char tempPalabra[TAMTOKEN];
+                strcpy_s(tempPalabra, TAMTOKEN, szPalabras[i]);
+                strcpy_s(szPalabras[i], TAMTOKEN, szPalabras[j]);
+                strcpy_s(szPalabras[j], TAMTOKEN, tempPalabra);
+
+                int tempEstadistica = iEstadisticas[i];
+                iEstadisticas[i] = iEstadisticas[j];
+                iEstadisticas[j] = tempEstadistica;
+            }
+        }
+    }
+}
 
 void ClonaPalabras(char* szPalabraLeida, char szPalabrasSugeridas[][TAMTOKEN], int& iNumSugeridas) {
 
