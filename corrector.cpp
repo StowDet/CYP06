@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #define PALABRAS 50000
+#define ABECEDARIO "abcdefghijklmnopqrstuvwxyzáéíóú"
 
 void Diccionario(char* szNombre, char szPalabras[][TAMTOKEN], int iEstadisticas[], int& iNumElementos) {
     FILE* fp;
@@ -76,8 +77,19 @@ void Diccionario(char* szNombre, char szPalabras[][TAMTOKEN], int iEstadisticas[
     }
 }
 
-void ClonaPalabras(char* szPalabraLeida, char szPalabrasSugeridas[][TAMTOKEN], int& iNumSugeridas) {
+void ClonaPalabras(char* szPalabraLeida, char szPalabrasSugeridas[][TAMTOKEN], int* iNumSugeridas) {
+    *iNumSugeridas = 0;
+    int len = strlen(szPalabraLeida);
 
+    for (int i = 0; i <= len; i++) {
+        for (int j = 0; ABECEDARIO[j] != '\0'; j++) {
+            char copia[TAMTOKEN] = { 0 };
+            strncpy_s(copia, TAMTOKEN, szPalabraLeida, i);
+            copia[i] = ABECEDARIO[j];
+            strcpy_s(&copia[i + 1], TAMTOKEN - i - 1, &szPalabraLeida[i]);
+            strcpy_s(szPalabrasSugeridas[(*iNumSugeridas)++], TAMTOKEN, copia);
+        }
+    }
 }
 void ListaCandidatas(char szPalabrasSugeridas[][TAMTOKEN], int iNumSugeridas, char szPalabras[][TAMTOKEN], int iEstadisticas[], int iNumElementos, char szListaFinal[][TAMTOKEN], int iPeso[], int iNumLista) {
 
