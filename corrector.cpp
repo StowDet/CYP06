@@ -144,9 +144,19 @@ void ListaCandidatas(char szPalabrasSugeridas[][TAMTOKEN], int iNumSugeridas, ch
     for (int i = 0; i < iNumSugeridas; i++) {
         for (int j = 0; j < iNumElementos; j++) {
             if (strcmp(szPalabrasSugeridas[i], szPalabras[j]) == 0) {
-                strcpy_s(szListaFinal[*iNumLista], TAMTOKEN, szPalabras[j]);
-                iPeso[*iNumLista] = iEstadisticas[j];
-                (*iNumLista)++;
+                // Verificar duplicados
+                int duplicado = 0;
+                for (int k = 0; k < *iNumLista; k++) {
+                    if (strcmp(szListaFinal[k], szPalabras[j]) == 0) {
+                        duplicado = 1;
+                        break;
+                    }
+                }
+                if (!duplicado) {
+                    strcpy_s(szListaFinal[*iNumLista], TAMTOKEN, szPalabras[j]);
+                    iPeso[*iNumLista] = iEstadisticas[j];
+                    (*iNumLista)++;
+                }
             }
         }
     }
