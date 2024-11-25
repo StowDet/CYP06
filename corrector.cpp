@@ -6,6 +6,15 @@
 #define PALABRAS 50000
 #define ABECEDARIO "abcdefghijklmnopqrstuvwxyzáéíóú"
 
+int es_palabra_repetida(const char* palabra, char szPalabrasSugeridas[][TAMTOKEN], int iNumSugeridas) {
+    for (int i = 0; i < iNumSugeridas; i++) {
+        if (strcmp(szPalabrasSugeridas[i], palabra) == 0) {
+            return 1; // La palabra ya existe
+        }
+    }
+    return 0;
+}
+
 void Diccionario(char* szNombre, char szPalabras[][TAMTOKEN], int iEstadisticas[], int& iNumElementos) {
     FILE* fp;
     fopen_s(&fp, szNombre, "r");
@@ -86,8 +95,9 @@ void ClonaPalabras(char* szPalabraLeida, char szPalabrasSugeridas[][TAMTOKEN], i
         char copia[TAMTOKEN] = { 0 };
         strncpy_s(copia, TAMTOKEN, szPalabraLeida, i);
         strcpy_s(&copia[i], TAMTOKEN - i, &szPalabraLeida[i + 1]);
-        strcpy_s(szPalabrasSugeridas[(*iNumSugeridas)++], TAMTOKEN, copia);
-
+        if (!es_palabra_repetida(copia, szPalabrasSugeridas, *iNumSugeridas)) {
+            strcpy_s(szPalabrasSugeridas[(*iNumSugeridas)++], TAMTOKEN, copia);
+        }
         // Sustitución
         for (int j = 0; ABECEDARIO[j] != '\0'; j++) {
             strcpy_s(copia, TAMTOKEN, szPalabraLeida);
