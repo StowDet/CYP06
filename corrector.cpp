@@ -135,6 +135,21 @@ void ClonaPalabras(char* szPalabraLeida, char szPalabrasSugeridas[][TAMTOKEN], i
             }
         }
     }
+    // Ordenar el diccionario alfabéticamente
+    for (int i = 0; i < iNumElementos - 1; i++) {
+        for (int j = i + 1; j < iNumElementos; j++) {
+            if (strcmp(szPalabras[i], szPalabras[j]) > 0) {
+                char tempPalabra[TAMTOKEN];
+                strcpy_s(tempPalabra, TAMTOKEN, szPalabras[i]);
+                strcpy_s(szPalabras[i], TAMTOKEN, szPalabras[j]);
+                strcpy_s(szPalabras[j], TAMTOKEN, tempPalabra);
+
+                int tempEstadistica = iEstadisticas[i];
+                iEstadisticas[i] = iEstadisticas[j];
+                iEstadisticas[j] = tempEstadistica;
+            }
+        }
+    }
 }
 void ListaCandidatas(char szPalabrasSugeridas[][TAMTOKEN], int iNumSugeridas, char szPalabras[][TAMTOKEN], int iEstadisticas[], int iNumElementos, char szListaFinal[][TAMTOKEN], int iPeso[], int iNumLista) {
 
