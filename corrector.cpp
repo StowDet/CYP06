@@ -86,23 +86,29 @@ void Diccionario(char* szNombre, char szPalabras[][TAMTOKEN], int iEstadisticas[
     }
 }
 
-void ClonaPalabras(char* szPalabraLeida, char szPalabrasSugeridas[][TAMTOKEN], int* iNumSugeridas) {
-    *iNumSugeridas = 0;
+void ClonaPalabras(char* szPalabraLeida, char szPalabrasSugeridas[][TAMTOKEN], int& iNumSugeridas) {
+    iNumSugeridas = 0;
     int len = strlen(szPalabraLeida);
 
+
+
+    // Operaciones: Eliminación, Transposición, Sustitución, Inserción
     for (int i = 0; i < len; i++) {
         // Eliminación
         char copia[TAMTOKEN] = { 0 };
         strncpy_s(copia, TAMTOKEN, szPalabraLeida, i);
         strcpy_s(&copia[i], TAMTOKEN - i, &szPalabraLeida[i + 1]);
-        if (!es_palabra_repetida(copia, szPalabrasSugeridas, *iNumSugeridas)) {
-            strcpy_s(szPalabrasSugeridas[(*iNumSugeridas)++], TAMTOKEN, copia);
+        if (!es_palabra_repetida(copia, szPalabrasSugeridas, iNumSugeridas)) {
+            strcpy_s(szPalabrasSugeridas[iNumSugeridas++], TAMTOKEN, copia);
         }
+
         // Sustitución
         for (int j = 0; ABECEDARIO[j] != '\0'; j++) {
             strcpy_s(copia, TAMTOKEN, szPalabraLeida);
             copia[i] = ABECEDARIO[j];
-            strcpy_s(szPalabrasSugeridas[(*iNumSugeridas)++], TAMTOKEN, copia);
+            if (!es_palabra_repetida(copia, szPalabrasSugeridas, iNumSugeridas)) {
+                strcpy_s(szPalabrasSugeridas[iNumSugeridas++], TAMTOKEN, copia);
+            }
         }
 
         // Transposición
@@ -111,18 +117,22 @@ void ClonaPalabras(char* szPalabraLeida, char szPalabrasSugeridas[][TAMTOKEN], i
             char temp = copia[i];
             copia[i] = copia[i + 1];
             copia[i + 1] = temp;
-            strcpy_s(szPalabrasSugeridas[(*iNumSugeridas)++], TAMTOKEN, copia);
+            if (!es_palabra_repetida(copia, szPalabrasSugeridas, iNumSugeridas)) {
+                strcpy_s(szPalabrasSugeridas[iNumSugeridas++], TAMTOKEN, copia);
+            }
         }
     }
 
-    // Inserción 
+    // Inserción
     for (int i = 0; i <= len; i++) {
         for (int j = 0; ABECEDARIO[j] != '\0'; j++) {
             char copia[TAMTOKEN] = { 0 };
             strncpy_s(copia, TAMTOKEN, szPalabraLeida, i);
             copia[i] = ABECEDARIO[j];
             strcpy_s(&copia[i + 1], TAMTOKEN - i - 1, &szPalabraLeida[i]);
-            strcpy_s(szPalabrasSugeridas[(*iNumSugeridas)++], TAMTOKEN, copia);
+            if (!es_palabra_repetida(copia, szPalabrasSugeridas, iNumSugeridas)) {
+                strcpy_s(szPalabrasSugeridas[iNumSugeridas++], TAMTOKEN, copia);
+            }
         }
     }
 }
