@@ -160,10 +160,10 @@ void ListaCandidatas(char szPalabrasSugeridas[][TAMTOKEN], int iNumSugeridas, ch
         }
     }
 
-    // Ordenar la lista final por peso 
+    // Ordenar la lista final por peso y alfabéticamente en caso de empate
     for (int i = 0; i < *iNumLista - 1; i++) {
         for (int j = i + 1; j < *iNumLista; j++) {
-            if (iPeso[i] < iPeso[j]) {
+            if (iPeso[i] < iPeso[j] || (iPeso[i] == iPeso[j] && strcmp(szListaFinal[i], szListaFinal[j]) > 0)) {
                 int tempPeso = iPeso[i];
                 iPeso[i] = iPeso[j];
                 iPeso[j] = tempPeso;
