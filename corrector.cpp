@@ -94,6 +94,15 @@ void ClonaPalabras(char* szPalabraLeida, char szPalabrasSugeridas[][TAMTOKEN], i
             copia[i] = ABECEDARIO[j];
             strcpy_s(szPalabrasSugeridas[(*iNumSugeridas)++], TAMTOKEN, copia);
         }
+
+        // Transposición
+        if (i < len - 1) {
+            strcpy_s(copia, TAMTOKEN, szPalabraLeida);
+            char temp = copia[i];
+            copia[i] = copia[i + 1];
+            copia[i + 1] = temp;
+            strcpy_s(szPalabrasSugeridas[(*iNumSugeridas)++], TAMTOKEN, copia);
+        }
     }
 
     // Inserción 
