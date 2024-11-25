@@ -138,31 +138,31 @@ void ClonaPalabras(char* szPalabraLeida, char szPalabrasSugeridas[][TAMTOKEN], i
 }
 void ListaCandidatas(char szPalabrasSugeridas[][TAMTOKEN], int iNumSugeridas, char szPalabras[][TAMTOKEN],
     int iEstadisticas[], int iNumElementos, char szListaFinal[][TAMTOKEN],
-    int iPeso[], int* iNumLista) {
-    *iNumLista = 0;
+    int iPeso[], int& iNumLista) {
+    iNumLista = 0;
 
     for (int i = 0; i < iNumSugeridas; i++) {
         for (int j = 0; j < iNumElementos; j++) {
             if (strcmp(szPalabrasSugeridas[i], szPalabras[j]) == 0) {
                 int duplicado = 0;
-                for (int k = 0; k < *iNumLista; k++) {
+                for (int k = 0; k < iNumLista; k++) {
                     if (strcmp(szListaFinal[k], szPalabras[j]) == 0) {
                         duplicado = 1;
                         break;
                     }
                 }
                 if (!duplicado) {
-                    strcpy_s(szListaFinal[*iNumLista], TAMTOKEN, szPalabras[j]);
-                    iPeso[*iNumLista] = iEstadisticas[j];
-                    (*iNumLista)++;
+                    strcpy_s(szListaFinal[iNumLista], TAMTOKEN, szPalabras[j]);
+                    iPeso[iNumLista] = iEstadisticas[j];
+                    iNumLista++;
                 }
             }
         }
     }
 
-    // Ordenar la lista final por peso y alfabéticamente en caso de empate
-    for (int i = 0; i < *iNumLista - 1; i++) {
-        for (int j = i + 1; j < *iNumLista; j++) {
+    // Ordenar la lista final por peso descendente
+    for (int i = 0; i < iNumLista - 1; i++) {
+        for (int j = i + 1; j < iNumLista; j++) {
             if (iPeso[i] < iPeso[j] || (iPeso[i] == iPeso[j] && strcmp(szListaFinal[i], szListaFinal[j]) > 0)) {
                 int tempPeso = iPeso[i];
                 iPeso[i] = iPeso[j];
@@ -175,4 +175,5 @@ void ListaCandidatas(char szPalabrasSugeridas[][TAMTOKEN], int iNumSugeridas, ch
             }
         }
     }
+}
 }
