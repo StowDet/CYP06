@@ -144,7 +144,6 @@ void ListaCandidatas(char szPalabrasSugeridas[][TAMTOKEN], int iNumSugeridas, ch
     for (int i = 0; i < iNumSugeridas; i++) {
         for (int j = 0; j < iNumElementos; j++) {
             if (strcmp(szPalabrasSugeridas[i], szPalabras[j]) == 0) {
-                // Verificar duplicados
                 int duplicado = 0;
                 for (int k = 0; k < *iNumLista; k++) {
                     if (strcmp(szListaFinal[k], szPalabras[j]) == 0) {
@@ -157,6 +156,22 @@ void ListaCandidatas(char szPalabrasSugeridas[][TAMTOKEN], int iNumSugeridas, ch
                     iPeso[*iNumLista] = iEstadisticas[j];
                     (*iNumLista)++;
                 }
+            }
+        }
+    }
+
+    // Ordenar la lista final por peso 
+    for (int i = 0; i < *iNumLista - 1; i++) {
+        for (int j = i + 1; j < *iNumLista; j++) {
+            if (iPeso[i] < iPeso[j]) {
+                int tempPeso = iPeso[i];
+                iPeso[i] = iPeso[j];
+                iPeso[j] = tempPeso;
+
+                char tempPalabra[TAMTOKEN];
+                strcpy_s(tempPalabra, TAMTOKEN, szListaFinal[i]);
+                strcpy_s(szListaFinal[i], TAMTOKEN, szListaFinal[j]);
+                strcpy_s(szListaFinal[j], TAMTOKEN, tempPalabra);
             }
         }
     }
