@@ -136,6 +136,18 @@ void ClonaPalabras(char* szPalabraLeida, char szPalabrasSugeridas[][TAMTOKEN], i
         }
     }
 }
-void ListaCandidatas(char szPalabrasSugeridas[][TAMTOKEN], int iNumSugeridas, char szPalabras[][TAMTOKEN], int iEstadisticas[], int iNumElementos, char szListaFinal[][TAMTOKEN], int iPeso[], int iNumLista) {
+void ListaCandidatas(char szPalabrasSugeridas[][TAMTOKEN], int iNumSugeridas, char szPalabras[][TAMTOKEN],
+    int iEstadisticas[], int iNumElementos, char szListaFinal[][TAMTOKEN],
+    int iPeso[], int* iNumLista) {
+    *iNumLista = 0;
 
+    for (int i = 0; i < iNumSugeridas; i++) {
+        for (int j = 0; j < iNumElementos; j++) {
+            if (strcmp(szPalabrasSugeridas[i], szPalabras[j]) == 0) {
+                strcpy_s(szListaFinal[*iNumLista], TAMTOKEN, szPalabras[j]);
+                iPeso[*iNumLista] = iEstadisticas[j];
+                (*iNumLista)++;
+            }
+        }
+    }
 }
